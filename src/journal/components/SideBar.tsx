@@ -24,22 +24,37 @@ export const SideBar = ({ drawerWidth = 240 }) => {
         open
         sx={{
           display: { xs: "block" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+          },
         }}
       >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
+        <Toolbar
+          sx={{
+            display: "block",
+            flexDirection: "column",
+          }}
+          disableGutters
+        >
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ padding: 2 }}
+            align="center"
+          >
             Diogo Alipazága
           </Typography>
           <Divider />
-          <List>
+          <List disablePadding>
             {["Enero", "Febrero", "Marzo", "Abril"].map((text) => (
-              <ListItem key={text} disablePadding>
+              <ListItem key={text} sx={{ padding: 0 }}>
                 <ListItemButton>
                   <ListItemIcon>
                     <TurnedInNot />
                   </ListItemIcon>
-                  <Grid container>
+                  <Grid container display="flex" flexDirection="column">
                     <ListItemText primary={text} />
                     <ListItemText secondary={"Algo"} />
                   </Grid>
@@ -47,6 +62,8 @@ export const SideBar = ({ drawerWidth = 240 }) => {
               </ListItem>
             ))}
           </List>
+          {/*
+           */}
         </Toolbar>
       </Drawer>
     </Box>
