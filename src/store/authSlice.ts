@@ -11,11 +11,21 @@ export const authSlice = createSlice({
     errorMessage: null,
   },
   reducers: {
-    login: (state, payload) => {
-      console.log(state, payload);
+    login: (state, { payload = {} }) => {
+      state.status = "authenticated";
+      state.uid = payload?.uid;
+      state.email = payload?.email;
+      state.displayName = payload?.displayName;
+      state.photoURL = payload?.photoURL;
+      state.errorMessage = null;
     },
-    logout: (state, payload) => {
-      console.log(state, payload);
+    logout: (state, { payload = {} }) => {
+      state.status = "not-authenticated";
+      state.uid = null;
+      state.email = null;
+      state.displayName = null;
+      state.photoURL = null;
+      state.errorMessage = payload?.errorMessage;
     },
     checkingCredencials: (state) => {
       state.status = "checking";
@@ -26,4 +36,4 @@ export const authSlice = createSlice({
 // Action creators are generated for each case reducer functio
 export const { login, logout, checkingCredencials } = authSlice.actions;
 
-export default authSlice.reducer
+export default authSlice.reducer;
