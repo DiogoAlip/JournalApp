@@ -43,8 +43,6 @@ export const useForm = (
         : errorMessage;
     }
     setFormValidator(formCheckedValues);
-
-    console.log(formCheckedValues);
   };
 
   return {

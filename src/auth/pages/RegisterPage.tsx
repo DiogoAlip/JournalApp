@@ -1,9 +1,11 @@
-import { Button, Link, TextField, Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import Grid from "@mui/material/Grid2";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks/useForm";
-import { useState } from "react";
+import { startCreatingUserWithEmailPassword } from "../../store/thunks";
+import { Button, Link, TextField, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 
 const initialData = {
   displayName: "",
@@ -25,6 +27,7 @@ const formValidator = {
 
 export const RegisterPage = () => {
   const [formSubmited, setFormSubmited] = useState(false);
+  const dispatch = useDispatch();
 
   const {
     displayName,
@@ -41,7 +44,8 @@ export const RegisterPage = () => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormSubmited(true);
-    console.log(passwordValid);
+    if (!isFormValid) return;
+    dispatch(startCreatingUserWithEmailPassword(formState));
   };
 
   return (
