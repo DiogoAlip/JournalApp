@@ -1,10 +1,10 @@
-import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useMemo } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks/useForm";
 import { startCreatingUserWithEmailPassword } from "../../store/thunks";
-import { Button, Link, TextField, Typography } from "@mui/material";
+import { Button, Link, TextField, Typography, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 const initialData = {
@@ -17,7 +17,7 @@ const formValidator = {
   email: [(value: string) => value.includes("@"), "El correo debe tener una @"],
   password: [
     (value: string) => value.length >= 6,
-    "El password debe tener más de 6 letras",
+    "La contraseña debe tener más de 6 letras",
   ],
   displayName: [
     (value: string) => value.length >= 3,
@@ -26,8 +26,16 @@ const formValidator = {
 };
 
 export const RegisterPage = () => {
+  const { status, errorMessage } = useSelector(
+    (state: { auth: { status: string; errorMessage: string } }) => state.auth
+  );
   const [formSubmited, setFormSubmited] = useState(false);
   const dispatch = useDispatch();
+
+  const isCheckingAuthentication = useMemo(
+    () => status === "checking",
+    [status]
+  );
 
   const {
     displayName,
@@ -92,8 +100,16 @@ export const RegisterPage = () => {
               fullWidth
             />
           </Grid>
+          <Grid size={{ xs: 12 }} display={errorMessage ? "" : "none"}>
+            <Alert severity="error">{errorMessage}</Alert>
+          </Grid>
           <Grid size={{ xs: 12 }} sx={{ mb: 2, mt: 1 }}>
-            <Button variant="contained" fullWidth type="submit">
+            <Button
+              disabled={isCheckingAuthentication}
+              variant="contained"
+              fullWidth
+              type="submit"
+            >
               Crear cuenta
             </Button>
           </Grid>

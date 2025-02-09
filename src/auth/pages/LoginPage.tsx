@@ -1,32 +1,55 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Google } from "@mui/icons-material";
-import { Button, Link, TextField, Typography } from "@mui/material";
+import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Grid from "@mui/material/Grid2";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks/useForm";
-import { checkingAuthentication, startGoogleSignIn } from "../../store/thunks";
+import {
+  startGoogleSignIn,
+  startLoggingWithEmailPassword,
+} from "../../store/thunks";
+
+const formValidator = {
+  email: [(value: string) => value.includes("@"), "El correo debe tener una @"],
+  password: [
+    (value: string) => value.length >= 6,
+    "La contraseña debe tener más de 6 letras",
+  ],
+};
+
+const initialData = {
+  email: "",
+  password: "",
+};
 
 export const LoginPage = () => {
+  const [formSubmited, setFormSubmited] = useState(false);
   const dispatch = useDispatch();
-  const { status } = useSelector(
-    (state: { auth: { status: string } }) => state.auth
+  const { status, errorMessage } = useSelector(
+    (state: { auth: { status: string; errorMessage: string } }) => state.auth
   );
 
   const isAuthenticating = useMemo(() => status === "checking", [status]);
 
-  const { email, password, onInputChange } = useForm({
-    email: "diogoalipazaga@gmail.com",
-    password: "12345678",
-  });
+  const {
+    email,
+    password,
+    onInputChange,
+    emailValid,
+    passwordValid,
+    isFormValid,
+  } = useForm(initialData, formValidator);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setFormSubmited(true);
+    if (!isFormValid) return;
     const email = event.target.elements["email"].value;
     const password = event.target.elements["password"].value;
 
-    dispatch(checkingAuthentication(email, password));
+    dispatch(startLoggingWithEmailPassword({ email, password }));
   };
 
   const onGoogleSignIn = () => {
@@ -40,11 +63,13 @@ export const LoginPage = () => {
           <Grid sx={{ mt: 2 }} size={{ xs: 12 }}>
             <TextField
               label="Correo"
-              type="email"
+              type="text"
               placeholder="correo@ejemplo.com"
               fullWidth
               name="email"
               value={email}
+              error={!!emailValid && formSubmited}
+              helperText={emailValid}
               onChange={onInputChange}
             />
           </Grid>
@@ -56,8 +81,13 @@ export const LoginPage = () => {
               fullWidth
               name="password"
               value={password}
+              error={!!passwordValid && formSubmited}
+              helperText={passwordValid}
               onChange={onInputChange}
             />
+          </Grid>
+          <Grid size={{ xs: 12 }} display={errorMessage ? "" : "none"}>
+            <Alert severity="error">{errorMessage}</Alert>
           </Grid>
           <Grid container spacing={2} sx={{ mb: 2, mt: 2 }} size={{ xs: 12 }}>
             <Grid size={{ xs: 12, sm: 6 }}>

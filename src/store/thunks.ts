@@ -1,6 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { checkingCredencials, logout, login } from "./authSlice";
 import {
+  loggingWithEmailPassword,
   registerUserWithEmailPassword,
   signInWithGoogle,
 } from "../firebase/providers";
@@ -44,6 +45,25 @@ export const startCreatingUserWithEmailPassword = ({
       });
     if (!ok) return dispatch(logout({ errorMessage }));
 
+    dispatch(login({ uid, displayName, email, photoURL }));
+  };
+};
+
+export const startLoggingWithEmailPassword = ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(checkingCredencials());
+    const { ok, uid, photoURL, errorMessage, displayName } =
+      await loggingWithEmailPassword({
+        email,
+        password,
+      });
+    if (!ok) return dispatch(logout({ errorMessage }));
     dispatch(login({ uid, displayName, email, photoURL }));
   };
 };
