@@ -58,12 +58,12 @@ export const startLoggingWithEmailPassword = ({
 }) => {
   return async (dispatch: Dispatch) => {
     dispatch(checkingCredencials());
-    const { ok, uid, photoURL, errorMessage, displayName } =
-      await loggingWithEmailPassword({
-        email,
-        password,
-      });
+    const result = await loggingWithEmailPassword({
+      email,
+      password,
+    });
+    const { ok, errorMessage } = result;
     if (!ok) return dispatch(logout({ errorMessage }));
-    dispatch(login({ uid, displayName, email, photoURL }));
+    dispatch(login(result));
   };
 };
