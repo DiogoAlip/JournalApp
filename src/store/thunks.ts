@@ -2,6 +2,7 @@ import { Dispatch } from "@reduxjs/toolkit";
 import { checkingCredencials, logout, login } from "./authSlice";
 import {
   loggingWithEmailPassword,
+  logoutFirebase,
   registerUserWithEmailPassword,
   signInWithGoogle,
 } from "../firebase/providers";
@@ -65,5 +66,13 @@ export const startLoggingWithEmailPassword = ({
     const { ok, errorMessage } = result;
     if (!ok) return dispatch(logout({ errorMessage }));
     dispatch(login(result));
+  };
+};
+
+export const startLogout = () => {
+  return async (dispatch: Dispatch) => {
+    await logoutFirebase();
+
+    dispatch(logout({}));
   };
 };

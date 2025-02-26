@@ -12,8 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { useSelector } from "react-redux";
 
 export const SideBar = ({ drawerWidth = 240 }) => {
+  const { displayName, email } = useSelector(
+    (state: { auth: { displayName: string; email: string } }) => state.auth
+  );
+
   return (
     <Box
       component="nav"
@@ -44,7 +49,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
             sx={{ padding: 2 }}
             align="center"
           >
-            Diogo Alipazága
+            {displayName ?? email}
           </Typography>
           <Divider />
           <List disablePadding>
@@ -62,8 +67,6 @@ export const SideBar = ({ drawerWidth = 240 }) => {
               </ListItem>
             ))}
           </List>
-          {/*
-           */}
         </Toolbar>
       </Drawer>
     </Box>
