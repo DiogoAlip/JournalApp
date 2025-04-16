@@ -9,7 +9,7 @@ import { useForm } from "../../hooks/useForm";
 import {
   startGoogleSignIn,
   startLoggingWithEmailPassword,
-} from "../../store/thunks";
+} from "../../store/auth/thunks";
 
 const formValidator = {
   email: [(value: string) => value.includes("@"), "El correo debe tener una @"],
