@@ -1,18 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface Note {
+  id: string;
+  title: string;
+  body: string;
+  date: number;
+}
+/* 
+interface Journal {
+  isSaving: boolean;
+  savedMessage: string;
+  notes: Array<Note>;
+  active: Note;
+} */
+
 export const journalSlice = createSlice({
   name: "journal",
   initialState: {
-    isSaving: true,
+    isSaving: false,
     savedMessage: "",
-    notes: [],
-    active: null,
+    notes: [] as Array<Note>,
+    active: {} as Note,
   },
   reducers: {
-    increment: (/*state, action */) => {},
-    addEmptyNote: (/*state, action*/) => {},
-    setNotes: (/* state, action */) => {},
-    setActiveNote: (/* state, action */) => {},
+    creatingNewNote: (state) => {
+      state.isSaving = true;
+    },
+    addNewEmptyNote: (state, action: { payload: Note }) => {
+      state.notes.push(action.payload);
+      state.isSaving = false;
+    },
+    setActiveNote: (state, action: { payload: Note }) => {
+      state.active = action.payload;
+    },
     setSaving: (/* state, action */) => {},
     deleteNoteByID: (/* state, action */) => {},
     updateNote: (/* state, action */) => {},
@@ -21,9 +41,8 @@ export const journalSlice = createSlice({
 
 // Action creators are generated for each case reducer functio
 export const {
-  increment,
-  addEmptyNote,
-  setNotes,
+  creatingNewNote,
+  addNewEmptyNote,
   setActiveNote,
   setSaving,
   deleteNoteByID,
