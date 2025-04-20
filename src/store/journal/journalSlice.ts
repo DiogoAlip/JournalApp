@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface Note {
+export interface Note {
   id: string;
   title: string;
   body: string;
@@ -33,7 +33,9 @@ export const journalSlice = createSlice({
     setActiveNote: (state, action: { payload: Note }) => {
       state.active = action.payload;
     },
-    setSaving: (/* state, action */) => {},
+    setNotes: (state, action: { payload: Array<Note> }) => {
+      state.notes = [...action.payload];
+    },
     deleteNoteByID: (/* state, action */) => {},
     updateNote: (/* state, action */) => {},
   },
@@ -44,7 +46,7 @@ export const {
   creatingNewNote,
   addNewEmptyNote,
   setActiveNote,
-  setSaving,
+  setNotes,
   deleteNoteByID,
   updateNote,
 } = journalSlice.actions;

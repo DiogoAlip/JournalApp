@@ -1,7 +1,8 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { FirebaseDB } from "../../firebase/config";
 import { collection, doc, setDoc } from "firebase/firestore/lite";
-import { addNewEmptyNote, setActiveNote, creatingNewNote } from "./";
+import { addNewEmptyNote, setActiveNote, creatingNewNote, setNotes } from "./";
+import { loadNotes } from "../../helper";
 
 export const startNewNote = () => {
   return async (
@@ -24,5 +25,16 @@ export const startNewNote = () => {
 
     dispatch(addNewEmptyNote(newNote));
     dispatch(setActiveNote(newNote));
+  };
+};
+
+export const startLoadingNotes = () => {
+  return async (
+    dispatch: Dispatch,
+    getState: () => { auth: { uid: string } }
+  ) => {
+    const { uid } = getState().auth;
+    const notes = await loadNotes(uid);
+    dispatch(setNotes(notes));
   };
 };
