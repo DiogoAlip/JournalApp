@@ -6,8 +6,8 @@ export interface Note {
   body: string;
   date: number;
 }
-/* 
-interface Journal {
+
+/* interface Journal {
   isSaving: boolean;
   savedMessage: string;
   notes: Array<Note>;
