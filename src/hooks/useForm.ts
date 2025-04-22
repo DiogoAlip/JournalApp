@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 
-type targetType = { name: string; value: string };
+export type targetType = { name: string; value: string };
 type validatorContentType = [() => boolean, string];
 type validatorType = Record<string, Array<validatorContentType> | null>;
 
 export const useForm = (
-  initialForm = {} as Record<string, string>,
+  initialForm = {} as Record<string, string | number>,
   validator = {} as validatorType
 ) => {
   const [formState, setFormState] = useState(initialForm);
@@ -14,6 +14,10 @@ export const useForm = (
   useEffect(() => {
     createValidator();
   }, [formState]);
+
+  useEffect(() => {
+    setFormState(initialForm);
+  }, [initialForm]);
 
   const isFormValid = useMemo(() => {
     for (const formValue of Object.keys(formValidator)) {
