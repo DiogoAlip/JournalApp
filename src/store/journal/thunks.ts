@@ -1,7 +1,15 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { FirebaseDB } from "../../firebase/config";
 import { collection, doc, setDoc } from "firebase/firestore/lite";
-import { addNewEmptyNote, setActiveNote, creatingNewNote, setNotes } from "./";
+import {
+  addNewEmptyNote,
+  setActiveNote,
+  creatingNewNote,
+  setNotes,
+  Note,
+  setSaving,
+  updateNote,
+} from "./";
 import { loadNotes } from "../../helper";
 
 export const startNewNote = () => {
@@ -13,7 +21,6 @@ export const startNewNote = () => {
 
     const { uid } = getState().auth;
     const newNote = {
-      id: "",
       title: "",
       body: "",
       date: new Date().getTime(),
@@ -21,7 +28,6 @@ export const startNewNote = () => {
 
     const newDoc = doc(collection(FirebaseDB, `${uid}/journal/notes`));
     await setDoc(newDoc, newNote);
-    newNote.id = newDoc.id;
 
     dispatch(addNewEmptyNote(newNote));
     dispatch(setActiveNote(newNote));
@@ -36,5 +42,27 @@ export const startLoadingNotes = () => {
     const { uid } = getState().auth;
     const notes = await loadNotes(uid);
     dispatch(setNotes(notes));
+  };
+};
+
+export const startSavingNote = () => {
+  return async (
+    dispatch: Dispatch,
+    getState: () => { auth: { uid: string }; journal: { active: Note } }
+  ) => {
+    dispatch(setSaving());
+
+    const { uid } = getState().auth;
+    const { active: note } = getState().journal;
+
+    const noteToFirestore = { ...note };
+    delete noteToFirestore.id;
+
+    const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
+    await setDoc(docRef, noteToFirestore, { merge: true });
+
+    console.log(docRef);
+
+    dispatch(updateNote(note));
   };
 };
