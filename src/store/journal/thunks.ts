@@ -10,7 +10,7 @@ import {
   setSaving,
   updateNote,
 } from "./";
-import { loadNotes } from "../../helper";
+import { fileUpload, loadNotes } from "../../helper";
 
 export const startNewNote = () => {
   return async (
@@ -64,5 +64,12 @@ export const startSavingNote = () => {
     console.log(docRef);
 
     dispatch(updateNote(note));
+  };
+};
+
+export const startUploadingFiles = (files = []) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(setSaving());
+    await fileUpload(files[0]);
   };
 };

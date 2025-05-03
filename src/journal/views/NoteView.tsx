@@ -1,7 +1,12 @@
 import { ChangeEvent, RefObject, useEffect, useMemo, useRef } from "react";
 import { useForm } from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
-import { Note, setActiveNote, startSavingNote } from "../../store/journal";
+import {
+  Note,
+  setActiveNote,
+  startSavingNote,
+  startUploadingFiles,
+} from "../../store/journal";
 import { SaveOutlined, UploadFileOutlined } from "@mui/icons-material";
 import { Button, IconButton, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -44,7 +49,7 @@ export const NoteView = () => {
 
   const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (target.files === 0) return;
-    console.log("subiendo");
+    dispatch(startUploadingFiles(target.files));
   };
 
   return (
