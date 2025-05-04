@@ -9,6 +9,7 @@ import {
   Note,
   setSaving,
   updateNote,
+  setPhotosToActiveNote,
 } from "./";
 import { fileUpload, loadNotes } from "../../helper";
 
@@ -24,13 +25,14 @@ export const startNewNote = () => {
       title: "",
       body: "",
       date: new Date().getTime(),
+      imageUrls: [],
     };
 
     const newDoc = doc(collection(FirebaseDB, `${uid}/journal/notes`));
     await setDoc(newDoc, newNote);
 
-    dispatch(addNewEmptyNote(newNote));
-    dispatch(setActiveNote(newNote));
+    dispatch(addNewEmptyNote({ ...newNote, id: newDoc.id }));
+    dispatch(setActiveNote({ ...newNote, id: newDoc.id }));
   };
 };
 
@@ -61,8 +63,6 @@ export const startSavingNote = () => {
     const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
     await setDoc(docRef, noteToFirestore, { merge: true });
 
-    console.log(docRef);
-
     dispatch(updateNote(note));
   };
 };
@@ -70,6 +70,14 @@ export const startSavingNote = () => {
 export const startUploadingFiles = (files = []) => {
   return async (dispatch: Dispatch) => {
     dispatch(setSaving());
-    await fileUpload(files[0]);
+    //await fileUpload(files[0]);
+    const fileUploadPromises = [];
+    for (const file of files) {
+      fileUploadPromises.push(fileUpload(file));
+    }
+
+    const photoUrls = await Promise.all(fileUploadPromises);
+
+    dispatch(setPhotosToActiveNote(photoUrls));
   };
 };

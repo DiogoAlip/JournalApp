@@ -14,12 +14,14 @@ export const SideBarItem = ({
   title,
   body,
   date,
+  imageUrls,
   id,
 }: {
   title: string;
   body: string;
   date: number;
-  id: string;
+  imageUrls: Array<Promise<string>>;
+  id?: string;
 }) => {
   const dispatch = useDispatch();
 
@@ -29,7 +31,7 @@ export const SideBarItem = ({
   );
 
   const onClickNote = () => {
-    dispatch(setActiveNote({ title, body, date, id }));
+    dispatch(setActiveNote({ title, body, date, imageUrls, id }));
   };
   return (
     <ListItem onClick={onClickNote} sx={{ padding: 0 }}>

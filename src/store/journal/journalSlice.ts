@@ -4,6 +4,8 @@ export interface Note {
   title: string;
   body: string;
   date: number;
+  imageUrls: Array<Promise<string>>;
+  id?: string;
 }
 
 /* interface Journal {
@@ -43,11 +45,18 @@ export const journalSlice = createSlice({
     },
     updateNote: (state, action: { payload: Note }) => {
       state.isSaving = false;
-      state.notes = state.notes.map((note) =>
-        note.id == action.payload.id ? action.payload : note
-      );
+      state.notes = state.notes.map((note) => {
+        return note.id == action.payload.id ? action.payload : note;
+      });
 
       state.savedMessage = `${action.payload.title} salvada correctamente`;
+    },
+    setPhotosToActiveNote: (
+      state,
+      action: { payload: Array<Promise<string>> }
+    ) => {
+      state.active.imageUrls = [...state.active.imageUrls, ...action.payload];
+      state.isSaving = false;
     },
     deleteNoteByID: (/* state, action */) => {},
   },
@@ -62,5 +71,6 @@ export const {
   setSaving,
   deleteNoteByID,
   updateNote,
+  setPhotosToActiveNote,
 } = journalSlice.actions;
 export default journalSlice.reducer;

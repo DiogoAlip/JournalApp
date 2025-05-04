@@ -1,4 +1,4 @@
-export const fileUpload = async (file: Array<string>) => {
+export const fileUpload = async (file: string) => {
   if (!file) throw new Error("no tenemos ningun archivo para subir");
   const cloudUrl = "https://api.cloudinary.com/v1_1/dosahiwet/image/upload";
   const formData = new FormData();

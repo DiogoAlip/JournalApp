@@ -9,8 +9,8 @@ export const loadNotes = async (uid = "") => {
   const docs = await getDocs(collectionRef);
 
   const notes = [] as Array<Note>;
-  docs.forEach((docs) => {
-    notes.push({ id: docs.id, ...(docs.data() as Note) });
+  docs.forEach((doc) => {
+    notes.push({ ...(doc.data() as Note), id: doc.id });
   });
   return notes;
 };
