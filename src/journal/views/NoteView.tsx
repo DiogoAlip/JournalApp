@@ -48,7 +48,7 @@ export const NoteView = () => {
   };
 
   const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.files === 0) return;
+    if (!target.files?.length) return;
     dispatch(startUploadingFiles(target.files));
   };
 
@@ -118,7 +118,7 @@ export const NoteView = () => {
           minRows={5}
         />
       </Grid>
-      <ImageGallery />
+      <ImageGallery {...note} />
     </>
   );
 };
