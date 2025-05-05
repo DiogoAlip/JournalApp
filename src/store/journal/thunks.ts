@@ -70,7 +70,6 @@ export const startSavingNote = () => {
 export const startUploadingFiles = (files = []) => {
   return async (dispatch: Dispatch) => {
     dispatch(setSaving());
-    //await fileUpload(files[0]);
     const fileUploadPromises = [];
     for (const file of files) {
       fileUploadPromises.push(fileUpload(file));
