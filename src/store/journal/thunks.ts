@@ -1,6 +1,6 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { FirebaseDB } from "../../firebase/config";
-import { collection, doc, setDoc } from "firebase/firestore/lite";
+import { collection, deleteDoc, doc, setDoc } from "firebase/firestore/lite";
 import {
   addNewEmptyNote,
   setActiveNote,
@@ -10,6 +10,7 @@ import {
   setSaving,
   updateNote,
   setPhotosToActiveNote,
+  deleteNoteByID,
 } from "./";
 import { fileUpload, loadNotes } from "../../helper";
 
@@ -78,5 +79,20 @@ export const startUploadingFiles = (files = []) => {
     const photoUrls = await Promise.all(fileUploadPromises);
 
     dispatch(setPhotosToActiveNote(photoUrls));
+  };
+};
+
+export const startDeletingNote = () => {
+  return async (
+    dispatch: Dispatch,
+    getState: () => { auth: { uid: string }; journal: { active: Note } }
+  ) => {
+    const { uid } = getState().auth;
+    const { active: note } = getState().journal;
+
+    const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
+    await deleteDoc(docRef);
+
+    dispatch(deleteNoteByID(note.id));
   };
 };

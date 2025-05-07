@@ -4,10 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Note,
   setActiveNote,
+  startDeletingNote,
   startSavingNote,
   startUploadingFiles,
 } from "../../store/journal";
-import { SaveOutlined, UploadFileOutlined } from "@mui/icons-material";
+import {
+  DeleteOutline,
+  SaveOutlined,
+  UploadFileOutlined,
+} from "@mui/icons-material";
 import { Button, IconButton, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { ImageGallery } from "../components";
@@ -50,6 +55,10 @@ export const NoteView = () => {
   const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (!target.files?.length) return;
     dispatch(startUploadingFiles(target.files));
+  };
+
+  const onDelete = () => {
+    dispatch(startDeletingNote());
   };
 
   return (
@@ -117,6 +126,11 @@ export const NoteView = () => {
           onChange={onInputChange}
           minRows={5}
         />
+      </Grid>
+      <Grid container justifyContent="end">
+        <Button onClick={onDelete}>
+          <DeleteOutline />
+        </Button>
       </Grid>
       <ImageGallery {...note} />
     </>
