@@ -3,8 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 export type targetType = { name: string; value: string };
 export type validatorType = Record<
   string,
-  [(value: string) => boolean, string]
+  [(value: string | number) => boolean, string]
 >;
+export type validatorResult = Record<string, null | string>;
 
 export const useForm = (
   initialForm = {} as Record<string, string | number>,
@@ -41,13 +42,14 @@ export const useForm = (
   };
 
   const createValidator = () => {
-    const formCheckedValues = {};
+    const formCheckedValues = {} as validatorResult;
     for (const formField of Object.keys(validator)) {
-      const [fn, errorMessage] = validator[formField];
-      //prettier-ignore
-      formCheckedValues[`${formField}Valid`] = fn(String(formState[formField]))
-        ? null
-        : errorMessage;
+      if (validator[formField]) {
+        const [fn, errorMessage] = validator[formField];
+        formCheckedValues[`${formField}Valid`] = fn(formState[formField])
+          ? null
+          : errorMessage;
+      }
     }
     setFormValidator(formCheckedValues);
   };
