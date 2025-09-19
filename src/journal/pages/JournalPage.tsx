@@ -11,6 +11,7 @@ export const JournalPage = () => {
   );
   const dispatch = useDispatch();
   const onClickStartNewNote = () => {
+    //prettier-ignore
     dispatch(startNewNote());
   };
 

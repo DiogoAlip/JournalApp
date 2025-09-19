@@ -25,8 +25,11 @@ export const signInWithGoogle = async () => {
     console.log(error);
     return {
       ok: false,
-      errorCode: error.code,
-      errorMessage: error.message,
+      errorCode:
+        typeof error === "object" && error !== null && "code" in error
+          ? error.code
+          : String(error),
+      errorMessage: error instanceof Error ? error.message : String(error),
     };
   }
 };
@@ -48,12 +51,16 @@ export const registerUserWithEmailPassword = async ({
     );
     const { uid, photoURL } = resp.user;
 
-    await updateProfile(FirebaseAuth.currentUser, { displayName });
-
-    return { ok: true, uid, photoURL, email, displayName };
-  } catch (error: { code: string; message: string } | null) {
+    if (FirebaseAuth.currentUser) {
+      await updateProfile(FirebaseAuth.currentUser, { displayName });
+      return { ok: true, uid, photoURL, email, displayName };
+    }
+  } catch (error: unknown | { code: string; message: string }) {
     console.log(error);
-    return { ok: false, errorMessage: error.message };
+    return {
+      ok: false,
+      errorMessage: error instanceof Error ? error.message : String(error),
+    };
   }
 };
 
@@ -72,8 +79,11 @@ export const loggingWithEmailPassword = async ({
     );
     const { uid, photoURL, displayName } = resp.user;
     return { ok: true, uid, photoURL, email, displayName };
-  } catch (error: { code: string; message: string } | null) {
-    return { ok: false, errorMessage: error.message };
+  } catch (error: unknown | { code: string; message: string }) {
+    return {
+      ok: false,
+      errorMessage: error instanceof Error ? error.message : String(error),
+    };
   }
 };
 

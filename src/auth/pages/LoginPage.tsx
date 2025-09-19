@@ -5,7 +5,7 @@ import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Grid from "@mui/material/Grid2";
 import { AuthLayout } from "../layout/AuthLayout";
-import { useForm } from "../../hooks/useForm";
+import { useForm, validatorType } from "../../hooks/useForm";
 import {
   startGoogleSignIn,
   startLoggingWithEmailPassword,
@@ -40,14 +40,16 @@ export const LoginPage = () => {
     emailValid,
     passwordValid,
     isFormValid,
-  } = useForm(initialData, formValidator);
+  } = useForm(initialData, formValidator as unknown as validatorType);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormSubmited(true);
     if (!isFormValid) return;
-    const email = event.target.elements["email"].value;
-    const password = event.target.elements["password"].value;
+    const form = event.target as HTMLFormElement;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)
+      .value;
 
     dispatch(startLoggingWithEmailPassword({ email, password }));
   };

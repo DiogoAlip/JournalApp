@@ -12,7 +12,7 @@ export const fileUpload = async (file: string) => {
 
     const cloudResp = await resp.json();
     return cloudResp.secure_url;
-  } catch (error: unknown | { message: string }) {
-    throw new Error(error?.message);
+  } catch (error: unknown) {
+    throw new Error(error instanceof Error ? error.message : String(error));
   }
 };
