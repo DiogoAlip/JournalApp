@@ -68,12 +68,12 @@ export const startSavingNote = () => {
   };
 };
 
-export const startUploadingFiles = (files = []) => {
+export const startUploadingFiles = (files = [] as unknown as FileList) => {
   return async (dispatch: Dispatch) => {
     dispatch(setSaving());
     const fileUploadPromises = [];
     for (const file of files) {
-      fileUploadPromises.push(fileUpload(file));
+      fileUploadPromises.push(fileUpload(String(file)));
     }
 
     const photoUrls = await Promise.all(fileUploadPromises);

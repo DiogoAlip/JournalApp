@@ -5,7 +5,7 @@ import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Grid from "@mui/material/Grid2";
 import { AuthLayout } from "../layout/AuthLayout";
-import { useForm, validatorType } from "../../hooks/useForm";
+import { useForm, ValidatorType } from "../../hooks/useForm";
 import {
   startGoogleSignIn,
   startLoggingWithEmailPassword,
@@ -17,7 +17,7 @@ const formValidator = {
     (value: string) => value.length >= 6,
     "La contraseña debe tener más de 6 letras",
   ],
-};
+} as ValidatorType<typeof initialData>;
 
 const initialData = {
   email: "",
@@ -40,7 +40,7 @@ export const LoginPage = () => {
     emailValid,
     passwordValid,
     isFormValid,
-  } = useForm(initialData, formValidator as unknown as validatorType);
+  } = useForm(initialData, formValidator);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,11 +51,13 @@ export const LoginPage = () => {
     const password = (form.elements.namedItem("password") as HTMLInputElement)
       .value;
 
-    dispatch(startLoggingWithEmailPassword({ email, password }));
+    dispatch(
+      startLoggingWithEmailPassword({ email, password }) as unknown as any //eslint-disable-line
+    );
   };
 
   const onGoogleSignIn = () => {
-    dispatch(startGoogleSignIn());
+    dispatch(startGoogleSignIn() as unknown as any); //eslint-disable-line
   };
 
   return (

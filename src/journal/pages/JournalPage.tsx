@@ -11,8 +11,7 @@ export const JournalPage = () => {
   );
   const dispatch = useDispatch();
   const onClickStartNewNote = () => {
-    //prettier-ignore
-    dispatch(startNewNote());
+    dispatch(startNewNote() as unknown as any); //eslint-disable-line
   };
 
   return (

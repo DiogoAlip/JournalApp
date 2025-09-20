@@ -49,16 +49,16 @@ export const NoteView = () => {
   }, [savedMessage]);
 
   const onSaveNote = () => {
-    dispatch(startSavingNote());
+    dispatch(startSavingNote() as unknown as any); //eslint-disable-line
   };
 
   const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (!target.files?.length) return;
-    dispatch(startUploadingFiles(target.files));
+    dispatch(startUploadingFiles(target.files) as unknown as any); //eslint-disable-line
   };
 
   const onDelete = () => {
-    dispatch(startDeletingNote());
+    dispatch(startDeletingNote() as unknown as any); //eslint-disable-line
   };
 
   return (

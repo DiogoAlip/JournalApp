@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useMemo } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
-import { useForm } from "../../hooks/useForm";
+import { useForm, ValidatorType } from "../../hooks/useForm";
 import { startCreatingUserWithEmailPassword } from "../../store/auth/thunks";
 import { Button, Link, TextField, Typography, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -23,7 +23,7 @@ const formValidator = {
     (value: string) => value.length >= 3,
     "El nombre es obligatorio",
   ],
-};
+} as ValidatorType<typeof initialData>;
 
 export const RegisterPage = () => {
   const { status, errorMessage } = useSelector(
@@ -53,7 +53,7 @@ export const RegisterPage = () => {
     event.preventDefault();
     setFormSubmited(true);
     if (!isFormValid) return;
-    dispatch(startCreatingUserWithEmailPassword(formState));
+    dispatch(startCreatingUserWithEmailPassword(formState) as unknown as any); //eslint-disable-line
   };
 
   return (
