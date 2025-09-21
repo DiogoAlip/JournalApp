@@ -3,12 +3,13 @@ import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useDispatch } from "react-redux";
 import { startLogout } from "../../store/auth/thunks";
+import { UnknownAction } from "@reduxjs/toolkit";
 
 export const NavBar = ({ drawerWidth = 240 }) => {
   const dispatch = useDispatch();
 
   const onLogout = () => {
-    dispatch(startLogout());
+    dispatch(startLogout() as unknown as UnknownAction);
   };
 
   return (
