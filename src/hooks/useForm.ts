@@ -18,6 +18,7 @@ export const useForm = <T extends Record<string, string | number>>(
 ) => {
   const [formState, setFormState] = useState<T>(initialForm);
   const [formValidator, setFormValidator] = useState<ValidatorResult<T>>({
+    //@ts-expect-error: Unreachable code error
     validator,
   });
 
@@ -50,6 +51,7 @@ export const useForm = <T extends Record<string, string | number>>(
     const formCheckedValues = {} as ValidatorResult<T>;
     for (const formField in validator) {
       const [fn, errorMessage] = validator[formField]!;
+      //@ts-expect-error: Unreachable code error
       formCheckedValues[`${formField}Valid`] = fn(formState[formField])
         ? null
         : errorMessage;
