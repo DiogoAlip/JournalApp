@@ -29,7 +29,9 @@ export const NoteView = () => {
       journal: { active: Note; savedMessage: string; isSaving: boolean };
     }) => state.journal
   );
-  const { body, title, date, onInputChange, formState } = useForm(note);
+  const { body, title, date, onInputChange, formState } = useForm(
+    note as unknown as Record<string, string | number>
+  );
 
   const dateString = useMemo(() => {
     const newDate = new Date(date);
@@ -39,7 +41,7 @@ export const NoteView = () => {
   const fileInputRef = useRef<HTMLInputElement>();
 
   useEffect(() => {
-    dispatch(setActiveNote(formState));
+    dispatch(setActiveNote(formState as unknown as Note));
   }, [formState]);
 
   useEffect(() => {

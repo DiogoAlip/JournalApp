@@ -17,8 +17,9 @@ export const useForm = <T extends Record<string, string | number>>(
   validator: ValidatorType<T> = {}
 ) => {
   const [formState, setFormState] = useState<T>(initialForm);
-  const [formValidator, setFormValidator] =
-    useState<ValidatorResult<T>>(validator);
+  const [formValidator, setFormValidator] = useState<ValidatorResult<T>>({
+    validator,
+  });
 
   useEffect(() => {
     createValidator();
