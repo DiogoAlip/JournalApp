@@ -39,14 +39,17 @@ export const startCreatingUserWithEmailPassword = ({
 }) => {
   return async (dispatch: Dispatch) => {
     dispatch(checkingCredencials());
-    const { ok, uid, photoURL, errorMessage } =
-      await registerUserWithEmailPassword({
-        email,
-        password,
-        displayName,
-      });
-    if (!ok) return dispatch(logout({ errorMessage }));
+    // slint-disable-next-line
+    const result = await registerUserWithEmailPassword({
+      email,
+      password,
+      displayName,
+    });
 
+    if (!result || !result.ok)
+      return dispatch(logout({ errorMessage: result?.errorMessage }));
+
+    const { uid, photoURL } = result;
     dispatch(login({ uid, displayName, email, photoURL }));
   };
 };
