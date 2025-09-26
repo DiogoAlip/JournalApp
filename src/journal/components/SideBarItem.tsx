@@ -30,6 +30,11 @@ export const SideBarItem = ({
     [title]
   );
 
+  const newBody = useMemo(
+    () => (body.length > 17 ? body.substring(0, 17) + "..." : body),
+    [body]
+  );
+
   const onClickNote = () => {
     dispatch(setActiveNote({ title, body, date, imageUrls, id }));
   };
@@ -41,7 +46,7 @@ export const SideBarItem = ({
         </ListItemIcon>
         <Grid container display="flex" flexDirection="column">
           <ListItemText primary={newTitle || "No Title"} />
-          <ListItemText secondary={body || "No Body"} />
+          <ListItemText secondary={newBody || "No Body"} />
         </Grid>
       </ListItemButton>
     </ListItem>

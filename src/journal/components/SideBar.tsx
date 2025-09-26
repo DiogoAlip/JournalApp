@@ -1,9 +1,24 @@
 import { useSelector } from "react-redux";
 import { Note } from "../../store/journal";
 import { SideBarItem } from "./SideBarItem";
-import { Box, Divider, Drawer, List, Toolbar, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { MenuOutlined } from "@mui/icons-material";
 
-export const SideBar = ({ drawerWidth = 240 }) => {
+export const SideBar = ({
+  drawerWidth = 240,
+  closeSideBar,
+}: {
+  drawerWidth: number;
+  closeSideBar: () => void;
+}) => {
   const { displayName, email } = useSelector(
     (state: { auth: { displayName: string; email: string } }) => state.auth
   );
@@ -34,15 +49,32 @@ export const SideBar = ({ drawerWidth = 240 }) => {
           }}
           disableGutters
         >
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ padding: 2 }}
-            align="center"
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              px: 2,
+              margin: 0,
+            }}
           >
-            {displayName ?? email}
-          </Typography>
+            <IconButton
+              onClick={() => closeSideBar()}
+              color="inherit"
+              edge="start"
+              sx={{ padding: "0px", px: 1, display: { sm: "none" } }}
+            >
+              <MenuOutlined />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ padding: 2 }}
+              align="center"
+            >
+              {displayName ?? email}
+            </Typography>
+          </Box>
           <Divider />
           <List disablePadding>
             {notes.map((note, index) => (

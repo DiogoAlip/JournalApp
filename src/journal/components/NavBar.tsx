@@ -5,7 +5,13 @@ import { useDispatch } from "react-redux";
 import { startLogout } from "../../store/auth/thunks";
 import { UnknownAction } from "@reduxjs/toolkit";
 
-export const NavBar = ({ drawerWidth = 240 }) => {
+export const NavBar = ({
+  drawerWidth = 240,
+  closeSideBar,
+}: {
+  drawerWidth: number;
+  closeSideBar: () => void;
+}) => {
   const dispatch = useDispatch();
 
   const onLogout = () => {
@@ -24,6 +30,7 @@ export const NavBar = ({ drawerWidth = 240 }) => {
     >
       <Toolbar>
         <IconButton
+          onClick={() => closeSideBar()}
           color="inherit"
           edge="start"
           sx={{ mr: 2, display: { sm: "none" } }}
