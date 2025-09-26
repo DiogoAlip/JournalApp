@@ -69,7 +69,7 @@ export const SideBar = ({
               variant="h6"
               noWrap
               component="div"
-              sx={{ padding: 2 }}
+              sx={{ py: 1.5 }}
               align="center"
             >
               {displayName ?? email}
