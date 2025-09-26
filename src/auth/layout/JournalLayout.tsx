@@ -4,7 +4,7 @@ import { NavBar } from "../../journal/components/NavBar";
 import { SideBar } from "../../journal/components";
 
 export const JournalLayout = ({ children }: { children: ReactNode }) => {
-  const [displaySideBar, setDisplaySideBar] = useState(false);
+  const [displaySideBar, setDisplaySideBar] = useState(true);
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
