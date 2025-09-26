@@ -1,10 +1,20 @@
 import { Box, Toolbar } from "@mui/material";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { NavBar } from "../../journal/components/NavBar";
 import { SideBar } from "../../journal/components";
 
 export const JournalLayout = ({ children }: { children: ReactNode }) => {
   const [displaySideBar, setDisplaySideBar] = useState(false);
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+      if (width > 600) setDisplaySideBar(true);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const closeSideBar = () => setDisplaySideBar(!displaySideBar);
   const drawerWidth = 240;
 
