@@ -30,7 +30,7 @@ export const NavBar = ({
     >
       <Toolbar>
         <IconButton
-          onClick={() => closeSideBar()}
+          onClick={closeSideBar}
           color="inherit"
           edge="start"
           sx={{ mr: 2, display: { sm: "none" } }}

@@ -58,7 +58,7 @@ export const SideBar = ({
             }}
           >
             <IconButton
-              onClick={() => closeSideBar()}
+              onClick={closeSideBar}
               color="inherit"
               edge="start"
               sx={{ padding: "0px", px: 1, display: { sm: "none" } }}
