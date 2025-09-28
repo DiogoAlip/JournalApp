@@ -51,6 +51,7 @@ export const NoteView = () => {
   }, [savedMessage]);
 
   const onSaveNote = () => {
+    localStorage.removeItem("lastActiveNote");
     dispatch(startSavingNote() as unknown as any); //eslint-disable-line
   };
 
@@ -60,7 +61,18 @@ export const NoteView = () => {
   };
 
   const onDelete = () => {
+    localStorage.removeItem("lastActiveNote");
     dispatch(startDeletingNote() as unknown as any); //eslint-disable-line
+  };
+
+  const onHandlerChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    onInputChange(e);
+    localStorage.setItem(
+      "lastActiveNote",
+      JSON.stringify({ ...note, [e.target.name]: e.target.value })
+    );
   };
 
   return (
@@ -113,7 +125,7 @@ export const NoteView = () => {
           label="Titulo"
           name="title"
           value={title}
-          onChange={onInputChange}
+          onChange={onHandlerChange}
           sx={{ border: "none", mb: 1 }}
         />
         <TextField
@@ -125,7 +137,7 @@ export const NoteView = () => {
           label="Nota"
           name="body"
           value={body}
-          onChange={onInputChange}
+          onChange={onHandlerChange}
           minRows={5}
         />
       </Grid>

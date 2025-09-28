@@ -45,6 +45,10 @@ export const startLoadingNotes = () => {
     const { uid } = getState().auth;
     const notes = await loadNotes(uid);
     dispatch(setNotes(notes));
+
+    const value = JSON.parse(localStorage.getItem("lastActiveNote") ?? "{}");
+    const noteFinded = notes.find((note) => note.id == value.id);
+    if (noteFinded) dispatch(setActiveNote({ ...value }));
   };
 };
 
