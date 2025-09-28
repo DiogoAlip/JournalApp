@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Note, startNewNote } from "../../store/journal";
+import { Note, startNewNote, startSavingNote } from "../../store/journal";
 import { JournalLayout } from "../../auth/layout/JournalLayout";
 import { NoteView, NothingSelectedView } from "../views/";
 import { IconButton } from "@mui/material";
@@ -10,8 +10,15 @@ export const JournalPage = () => {
   const { isSaving, active } = useSelector(
     (state: { journal: { isSaving: boolean; active: Note } }) => state.journal
   );
+  const isWritedNote =
+    (active.title?.length > 0 && active.body?.length > 0) ||
+    !Object.keys(active).length;
   const dispatch = useDispatch();
+
   const onClickStartNewNote = () => {
+    if (isSaving || isWritedNote) {
+      dispatch(startSavingNote() as unknown as UnknownAction);
+    }
     dispatch(startNewNote() as unknown as UnknownAction);
   };
 
@@ -21,7 +28,7 @@ export const JournalPage = () => {
 
       <IconButton
         onClick={onClickStartNewNote}
-        disabled={isSaving}
+        disabled={isSaving || !isWritedNote}
         sx={{
           size: "large",
           color: "white",

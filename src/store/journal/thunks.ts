@@ -34,6 +34,10 @@ export const startNewNote = () => {
 
     dispatch(addNewEmptyNote({ ...newNote, id: newDoc.id }));
     dispatch(setActiveNote({ ...newNote, id: newDoc.id }));
+    localStorage.setItem(
+      "lastActiveNote",
+      JSON.stringify({ ...newNote, id: newDoc.id })
+    );
   };
 };
 
