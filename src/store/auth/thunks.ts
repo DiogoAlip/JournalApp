@@ -23,7 +23,6 @@ export const startGoogleSignIn = () => {
     if (!result?.ok)
       return dispatch(logout({ errorMessage: result?.errorMessage }));
 
-    console.log(result);
     dispatch(login(result));
   };
 };

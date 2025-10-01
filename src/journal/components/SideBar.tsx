@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { MenuOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export const SideBar = ({
   drawerWidth = 240,
@@ -25,6 +26,7 @@ export const SideBar = ({
   const { notes } = useSelector(
     (state: { journal: { notes: Array<Note> } }) => state.journal
   );
+  const navigateTo = useNavigate();
 
   return (
     <Box
@@ -69,8 +71,17 @@ export const SideBar = ({
               variant="h6"
               noWrap
               component="div"
-              sx={{ py: 1.5 }}
+              sx={{
+                py: 1.5,
+                cursor: "pointer",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
               align="center"
+              onClick={() => {
+                navigateTo("/account");
+              }}
             >
               {displayName ?? email}
             </Typography>
