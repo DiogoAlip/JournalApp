@@ -7,11 +7,13 @@ import {
   Drawer,
   IconButton,
   List,
+  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { MenuOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const SideBar = ({
   drawerWidth = 240,
@@ -27,7 +29,13 @@ export const SideBar = ({
     (state: { journal: { notes: Array<Note> } }) => state.journal
   );
   const navigateTo = useNavigate();
-
+  const [searchNote, setSearchNote] = useState("");
+  const matchSearch = (note: Note) => {
+    const lowerBody = note.body.toLowerCase();
+    const lowerTitle = note.title.toLowerCase();
+    const lowerSearch = searchNote.toLowerCase();
+    return lowerBody.includes(lowerSearch) || lowerTitle.includes(lowerSearch);
+  };
   return (
     <Box
       component="nav"
@@ -87,10 +95,22 @@ export const SideBar = ({
             </Typography>
           </Box>
           <Divider />
+          <Box width="full" padding={2}>
+            <TextField
+              type="text"
+              size="small"
+              placeholder="Search Note"
+              fullWidth
+              name="SearchNote"
+              value={searchNote}
+              onChange={(e) => setSearchNote(e.target.value)}
+            />
+          </Box>
           <List disablePadding>
-            {notes.map((note, index) => (
-              <SideBarItem key={index} {...note} />
-            ))}
+            {notes.map(
+              (note, index) =>
+                matchSearch(note) && <SideBarItem key={index} {...note} />
+            )}
           </List>
         </Toolbar>
       </Drawer>
