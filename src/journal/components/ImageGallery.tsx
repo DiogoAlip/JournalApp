@@ -12,16 +12,19 @@ export const ImageGallery = ({
       cols={4}
       rowHeight={121}
     >
-      {imageUrls.map((image, index) => (
-        <ImageListItem key={index}>
-          <img
-            src={`${image}`}
-            srcSet={`${image}`}
-            alt={"Note Image"}
-            loading="lazy"
-          />
-        </ImageListItem>
-      ))}
+      {imageUrls.map((image, index) => {
+        const imageString = String(image);
+        return (
+          <ImageListItem key={`${index}-${image}`}>
+            <img
+              src={`${imageString}`}
+              srcSet={`${imageString}`}
+              alt={"Note Image"}
+              loading="lazy"
+            />
+          </ImageListItem>
+        );
+      })}
     </ImageList>
   );
 };

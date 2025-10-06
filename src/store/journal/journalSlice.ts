@@ -8,13 +8,6 @@ export interface Note {
   id?: string;
 }
 
-/* interface Journal {
-  isSaving: boolean;
-  savedMessage: string;
-  notes: Array<Note>;
-  active: Note;
-} */
-
 export const journalSlice = createSlice({
   name: "journal",
   initialState: {

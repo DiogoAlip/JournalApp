@@ -109,7 +109,9 @@ export const SideBar = ({
           <List disablePadding>
             {notes.map(
               (note, index) =>
-                matchSearch(note) && <SideBarItem key={index} {...note} />
+                matchSearch(note) && (
+                  <SideBarItem key={`${index}-${note.id}`} {...note} />
+                )
             )}
           </List>
         </Toolbar>

@@ -45,7 +45,7 @@ export const startCreatingUserWithEmailPassword = ({
       displayName,
     });
 
-    if (!result || !result.ok)
+    if (!result?.ok)
       return dispatch(logout({ errorMessage: result?.errorMessage }));
 
     const { uid, photoURL } = result;
