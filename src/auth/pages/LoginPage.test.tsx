@@ -5,7 +5,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { MemoryRouter } from "react-router-dom";
 import { LoginPage } from "./LoginPage";
 
-// Mock de los thunks
 vi.mock("../../store/auth/thunks", () => ({
   startLoggingWithEmailPassword: vi.fn(() => ({ type: "auth/login" })),
   startGoogleSignIn: vi.fn(() => ({ type: "auth/googleSignIn" })),

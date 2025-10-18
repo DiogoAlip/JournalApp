@@ -5,7 +5,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { MemoryRouter } from "react-router-dom";
 import { AccountPage } from "./AccountPage";
 
-// Mock del helper noteData
 vi.mock("../../helper/noteData", () => ({
   noteData: vi.fn(() => ({
     totalNotesLength: 100,
@@ -65,6 +64,8 @@ describe("AccountPage", () => {
     renderWithProviders(<AccountPage />);
 
     const img = screen.getByAltText("test@example.com");
+    expect(screen.getByText("Test User")).toBeInTheDocument();
+    expect(screen.getByText("test@example.com")).toBeInTheDocument();
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute("src", "https://example.com/photo.jpg=s200-c");
   });
@@ -101,23 +102,44 @@ describe("AccountPage", () => {
     ).toBeInTheDocument();
   });
 
-  /*test("debe mostrar la fecha de la nota más antigua", () => {
+  test("debe mostrar la fecha de la nota más antigua", () => {
     renderWithProviders(<AccountPage />);
 
-    const oldDate = new Date(1640000000000).toLocaleString();
-    expect(
-      screen.getByText(new RegExp(`nota más antigua: ${oldDate}`, "i"))
-    ).toBeInTheDocument();
+    const oldestNote = screen.getByText(/nota más antigua/i);
+    const stringOldestNote = String(
+      oldestNote.innerHTML.replace(/&nbsp;/g, " ")
+    );
+
+    const oldDate = new Date(1640000000000);
+    const stringOldDate = String(oldDate.toLocaleString())
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ");
+
+    expect(stringOldestNote.includes(stringOldDate)).toBeTruthy();
   });
 
   test("debe mostrar la fecha de la nota más reciente", () => {
     renderWithProviders(<AccountPage />);
 
+    const newestNote = screen.getByText(/nota más reciente/i);
+    const stringNewestNote = String(
+      newestNote.innerHTML.replace(/&nbsp;/g, " ")
+    );
+
     const newDate = new Date(1700000000000).toLocaleString();
-    expect(
-      screen.getByText(new RegExp(`nota más reciente: ${newDate}`, "i"))
-    ).toBeInTheDocument();
-  });*/
+    const stringNewDate = String(newDate.toLocaleString())
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ");
+
+    expect(stringNewestNote.includes(stringNewDate)).toBeTruthy();
+  });
+
+  test("debe tener un botón de volver atrás", () => {
+    renderWithProviders(<AccountPage />);
+
+    const backButton = screen.getByRole("button");
+    expect(backButton).toBeInTheDocument();
+  });
 
   test("debe navegar atrás al hacer click en el botón", () => {
     renderWithProviders(<AccountPage />);
@@ -126,6 +148,13 @@ describe("AccountPage", () => {
     fireEvent.click(backButton);
 
     expect(mockNavigate).toHaveBeenCalledWith(-1);
+  });
+
+  test("debe renderizar el ícono ArrowBack", () => {
+    renderWithProviders(<AccountPage />);
+
+    const button = screen.getByRole("button");
+    expect(button.querySelector("svg")).toBeInTheDocument();
   });
 
   test("debe mostrar 0 notas cuando no hay notas", () => {

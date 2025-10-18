@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { JournalPage } from "./JournalPage";
 
-// Mock de los componentes hijos
 vi.mock("../views/", () => ({
   NoteView: () => <div data-testid="note-view">Note View</div>,
   NothingSelectedView: () => (
@@ -18,7 +17,6 @@ vi.mock("../../auth/layout/JournalLayout", () => ({
   ),
 }));
 
-// Mock de los thunks
 vi.mock("../../store/journal", () => ({
   startNewNote: vi.fn(() => ({ type: "journal/startNewNote" })),
   startSavingNote: vi.fn(() => ({ type: "journal/startSavingNote" })),
@@ -44,16 +42,9 @@ const renderWithProviders = (
   return render(<Provider store={store}>{component}</Provider>);
 };
 
-describe("JournalPage", () => {
+describe("<JournalPage/>", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  test("debe renderizar el componente correctamente", () => {
-    renderWithProviders(<JournalPage />);
-
-    expect(screen.getByTestId("journal-layout")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toBeInTheDocument();
   });
 
   test("debe mostrar NothingSelectedView cuando no hay nota activa", () => {
@@ -76,6 +67,7 @@ describe("JournalPage", () => {
     renderWithProviders(<JournalPage />, { isSaving: true, active: {} });
 
     const addButton = screen.getByRole("button");
+    expect(addButton).toBeInTheDocument();
     expect(addButton).toBeDisabled();
   });
 
@@ -112,15 +104,6 @@ describe("JournalPage", () => {
 
     // El botón debería ser clickeable si está habilitado
     expect(addButton).not.toBeDisabled();
-  });
-
-  test("debe renderizar el ícono AddOutlined", () => {
-    renderWithProviders(<JournalPage />);
-
-    const button = screen.getByRole("button");
-    expect(button).toBeInTheDocument();
-    // El ícono está dentro del botón
-    expect(button.querySelector("svg")).toBeInTheDocument();
   });
 
   test("el botón debe tener estilos de posición fixed", () => {

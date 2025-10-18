@@ -5,7 +5,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { MemoryRouter } from "react-router-dom";
 import { RegisterPage } from "./RegisterPage";
 
-// Mock del thunk
 vi.mock("../../store/auth/thunks", () => ({
   startCreatingUserWithEmailPassword: vi.fn(() => ({ type: "auth/register" })),
 }));
@@ -126,7 +125,7 @@ describe("RegisterPage", () => {
     renderWithProviders(<RegisterPage />);
 
     const emailInput = screen.getByLabelText(/correo/i);
-    fireEvent.change(emailInput, { target: { value: "invalid" } });
+    fireEvent.change(emailInput, { target: { value: "invalido" } });
 
     expect(
       screen.queryByText(/el correo debe tener una @/i)
