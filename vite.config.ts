@@ -23,7 +23,6 @@ export default defineConfig({
         "vite.config.ts",
         "eslint.config.js",
         "**/index.ts*",
-        "**/thunks.ts",
       ],
     },
   },
