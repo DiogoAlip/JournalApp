@@ -11,11 +11,12 @@ export default defineConfig({
     setupFiles: "./src/vitest.ts",
     coverage: {
       exclude: [
-        "src/journal/components/*",
         "src/auth/routes/*",
-        "src/firebase/*",
-        "src/hooks/*",
+        "src/journal/routes/*",
         "src/router/*",
+        "src/firebase/*",
+        "src/journal/components/*",
+        "src/hooks/*",
         "src/theme/*",
         "src/ui/*",
         "src/vite-env.d.ts",
