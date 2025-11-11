@@ -6,12 +6,13 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Icon,
   List,
   TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { MenuOutlined } from "@mui/icons-material";
+import { DeleteOutline, MenuOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -39,7 +40,10 @@ export const SideBar = ({
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      sx={{
+        width: { sm: drawerWidth },
+        flexShrink: { sm: 0 },
+      }}
     >
       <Drawer
         variant="permanent"
@@ -114,7 +118,33 @@ export const SideBar = ({
                 )
             )}
           </List>
+          <Box height="80px"></Box>
         </Toolbar>
+        <Box
+          height="100%"
+          display="flex"
+          flexDirection="column-reverse"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="primary.main"
+            position="fixed"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            maxWidth={`${drawerWidth - 40}px`}
+            width="100%"
+            marginBottom={3}
+            borderRadius={10}
+            px={2}
+            py={1}
+          >
+            <Icon>
+              <DeleteOutline sx={{ color: "white" }} />
+            </Icon>
+            <Typography color="white">Papelera</Typography>
+          </Box>
+        </Box>
       </Drawer>
     </Box>
   );
