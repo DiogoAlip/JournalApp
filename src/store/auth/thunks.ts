@@ -7,6 +7,8 @@ import {
   signInWithGoogle,
 } from "../../firebase/providers";
 import { clearNotesOnLogout } from "../journal";
+import { collection } from "firebase/firestore";
+import { FirebaseDB } from "../../firebase/config";
 
 export const checkingAuthentication = (email: string, password: string) => {
   return async (dispatch: Dispatch) => {
@@ -67,6 +69,8 @@ export const startLoggingWithEmailPassword = ({
       password,
     });
     const { ok, errorMessage } = result;
+    const TrashBinComprober = collection(FirebaseDB, String(result.uid));
+    console.log(TrashBinComprober);
     if (!ok) return dispatch(logout({ errorMessage }));
     dispatch(login(result));
   };
