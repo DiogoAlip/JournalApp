@@ -11,6 +11,7 @@ import {
   TextField,
   Toolbar,
   Typography,
+  Button,
 } from "@mui/material";
 import { DeleteOutline, MenuOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -126,24 +127,28 @@ export const SideBar = ({
           flexDirection="column-reverse"
           alignItems="center"
         >
-          <Box
-            bgcolor="primary.main"
-            position="fixed"
-            display="flex"
-            justifyContent="space-around"
-            alignItems="center"
-            maxWidth={`${drawerWidth - 40}px`}
-            width="100%"
-            marginBottom={3}
-            borderRadius={10}
-            px={2}
-            py={1}
+          <Button
+            sx={{
+              bgcolor: "secondary.main",
+              px: 2,
+              py: 1,
+              position: "fixed",
+              display: "flex",
+              gap: 1,
+              alignContent: "center",
+              maxWidth: `${drawerWidth - 40}px`,
+              width: "100%",
+              height: "fit-content",
+              mb: 3,
+            }}
           >
-            <Icon>
+            <Icon sx={{ display: "flex" }}>
               <DeleteOutline sx={{ color: "white" }} />
             </Icon>
-            <Typography color="white">Papelera</Typography>
-          </Box>
+            <Typography color="white" variant="body1">
+              Papelera
+            </Typography>
+          </Button>
         </Box>
       </Drawer>
     </Box>
