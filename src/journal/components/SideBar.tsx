@@ -16,6 +16,8 @@ import {
 import { DeleteOutline, MenuOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Modal } from "../../ui/compenents/Modal";
+import { DeletedSideBarItem } from "./DeletedSideBarItem";
 
 export const SideBar = ({
   drawerWidth = 240,
@@ -32,12 +34,16 @@ export const SideBar = ({
   );
   const navigateTo = useNavigate();
   const [searchNote, setSearchNote] = useState("");
+
   const matchSearch = (note: Note) => {
     const lowerBody = note.body.toLowerCase();
     const lowerTitle = note.title.toLowerCase();
     const lowerSearch = searchNote.toLowerCase();
     return lowerBody.includes(lowerSearch) || lowerTitle.includes(lowerSearch);
   };
+
+  const [handleTrashBinView, setHandleTrashBinView] = useState(false);
+
   return (
     <Box
       component="nav"
@@ -46,111 +52,127 @@ export const SideBar = ({
         flexShrink: { sm: 0 },
       }}
     >
-      <Drawer
-        variant="permanent"
-        open
-        sx={{
-          display: { xs: "block" },
-          "& .MuiDrawer-paper": {
-            boxSizing: "border-box",
-            width: drawerWidth,
-          },
-        }}
-      >
-        <Toolbar
+      <>
+        {handleTrashBinView && (
+          <Modal
+            open={handleTrashBinView}
+            onClose={() => setHandleTrashBinView(!handleTrashBinView)}
+            title="Papelera"
+          >
+            <List disablePadding>
+              {notes.map((note, index) => (
+                <DeletedSideBarItem key={`${index}-${note.id}`} {...note} />
+              ))}
+            </List>
+          </Modal>
+        )}
+        <Drawer
+          variant="permanent"
+          open
           sx={{
-            display: "block",
-            flexDirection: "column",
+            display: { xs: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
-          disableGutters
         >
-          <Box
+          <Toolbar
             sx={{
-              display: "flex",
-              alignItems: "center",
-              px: 2,
-              margin: 0,
+              display: "block",
+              flexDirection: "column",
             }}
+            disableGutters
           >
-            <IconButton
-              onClick={closeSideBar}
-              color="inherit"
-              edge="start"
-              sx={{ padding: "0px", px: 1, display: { sm: "none" } }}
-            >
-              <MenuOutlined />
-            </IconButton>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
+            <Box
               sx={{
-                py: 1.5,
-                cursor: "pointer",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-              align="center"
-              onClick={() => {
-                navigateTo("/account");
+                display: "flex",
+                alignItems: "center",
+                px: 2,
+                margin: 0,
               }}
             >
-              {displayName ?? email}
-            </Typography>
-          </Box>
-          <Divider />
-          <Box width="full" padding={2}>
-            <TextField
-              type="text"
-              size="small"
-              placeholder="Search Note"
-              fullWidth
-              name="SearchNote"
-              value={searchNote}
-              onChange={(e) => setSearchNote(e.target.value)}
-            />
-          </Box>
-          <List disablePadding>
-            {notes.map(
-              (note, index) =>
-                matchSearch(note) && (
-                  <SideBarItem key={`${index}-${note.id}`} {...note} />
-                )
-            )}
-          </List>
-          <Box height="80px"></Box>
-        </Toolbar>
-        <Box
-          height="100%"
-          display="flex"
-          flexDirection="column-reverse"
-          alignItems="center"
-        >
-          <Button
-            sx={{
-              bgcolor: "secondary.main",
-              px: 2,
-              py: 1,
-              position: "fixed",
-              display: "flex",
-              gap: 1,
-              alignContent: "center",
-              maxWidth: `${drawerWidth - 40}px`,
-              width: "100%",
-              height: "fit-content",
-              mb: 3,
-            }}
+              <IconButton
+                onClick={closeSideBar}
+                color="inherit"
+                edge="start"
+                sx={{ padding: "0px", px: 1, display: { sm: "none" } }}
+              >
+                <MenuOutlined />
+              </IconButton>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{
+                  py: 1.5,
+                  cursor: "pointer",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+                align="center"
+                onClick={() => {
+                  navigateTo("/account");
+                }}
+              >
+                {displayName ?? email}
+              </Typography>
+            </Box>
+            <Divider />
+            <Box width="full" padding={2}>
+              <TextField
+                type="text"
+                size="small"
+                placeholder="Search Note"
+                fullWidth
+                name="SearchNote"
+                value={searchNote}
+                onChange={(e) => setSearchNote(e.target.value)}
+              />
+            </Box>
+            <List disablePadding>
+              {notes.map(
+                (note, index) =>
+                  matchSearch(note) && (
+                    <SideBarItem key={`${index}-${note.id}`} {...note} />
+                  )
+              )}
+            </List>
+            <Box height="80px"></Box>
+          </Toolbar>
+          <Box
+            height="100%"
+            display="flex"
+            flexDirection="column-reverse"
+            alignItems="center"
           >
-            <Icon sx={{ display: "flex" }}>
-              <DeleteOutline sx={{ color: "white" }} />
-            </Icon>
-            <Typography color="white" variant="body1">
-              Papelera
-            </Typography>
-          </Button>
-        </Box>
-      </Drawer>
+            <Button
+              onClick={() => setHandleTrashBinView(!handleTrashBinView)}
+              sx={{
+                bgcolor: "primary.main",
+                px: 2,
+                py: 1,
+                position: "fixed",
+                display: "flex",
+                gap: 1,
+                alignContent: "center",
+                maxWidth: `${drawerWidth - 40}px`,
+                width: "100%",
+                height: "fit-content",
+                mb: 3,
+              }}
+            >
+              <Icon sx={{ display: "flex" }}>
+                <DeleteOutline sx={{ color: "white" }} />
+              </Icon>
+              <Typography color="white" variant="body1">
+                Papelera
+              </Typography>
+            </Button>
+          </Box>
+        </Drawer>
+      </>
     </Box>
   );
 };
