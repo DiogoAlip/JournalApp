@@ -24,7 +24,7 @@ vi.mock("../../store/journal", () => ({
   })),
   startSavingNote: vi.fn(() => ({ type: "journal/startSavingNote" })),
   startUploadingFiles: vi.fn(() => ({ type: "journal/startUploadingFiles" })),
-  startDeletingNote: vi.fn(() => ({ type: "journal/startDeletingNote" })),
+  startRemovingNote: vi.fn(() => ({ type: "journal/startRemovingNote" })),
 }));
 
 // Mock de localStorage

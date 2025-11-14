@@ -1,13 +1,17 @@
 import { getDocs, collection } from "firebase/firestore/lite";
 import { FirebaseDB } from "../firebase/config";
 import { Note } from "../store/journal/journalSlice";
-import { tablesUpgrader } from "./trashBinUpgrader";
 
-export const loadNotes = async (uid = "") => {
-  tablesUpgrader(uid);
+export const loadNotesByPath = async ({
+  uid,
+  path,
+}: {
+  uid: string;
+  path?: string;
+}) => {
   if (!uid) throw new Error("UID user does not exists");
 
-  const collectionRef = collection(FirebaseDB, `${uid}/journal/notes`);
+  const collectionRef = collection(FirebaseDB, `${uid}${path}`);
   const docs = await getDocs(collectionRef);
 
   const notes = [] as Array<Note>;

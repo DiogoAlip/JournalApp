@@ -3,7 +3,7 @@ import { Note } from "../../store/journal";
 import { Box, Divider, IconButton, Typography } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { noteData } from "../../helper/noteData";
+import { noteData } from "../../helper";
 
 export const AccountPage = () => {
   const { displayName, email, photoURL } = useSelector(

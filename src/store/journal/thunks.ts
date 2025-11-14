@@ -10,9 +10,11 @@ import {
   setSaving,
   updateNote,
   setPhotosToActiveNote,
+  removeNoteByID,
+  setTrashBin,
   deleteNoteByID,
 } from "./";
-import { fileUpload, loadNotes } from "../../helper";
+import { fileUpload, loadNotesByPath } from "../../helper";
 
 export const startNewNote = () => {
   return async (
@@ -47,12 +49,23 @@ export const startLoadingNotes = () => {
     getState: () => { auth: { uid: string } }
   ) => {
     const { uid } = getState().auth;
-    const notes = await loadNotes(uid);
+    const notes = await loadNotesByPath({ uid, path: "/journal/notes" });
     dispatch(setNotes(notes));
 
     const value = JSON.parse(localStorage.getItem("lastActiveNote") ?? "{}");
     const noteFinded = notes.find((note) => note.id == value.id);
     if (noteFinded) dispatch(setActiveNote({ ...value }));
+  };
+};
+
+export const startLoadingDeletedNotes = () => {
+  return async (
+    dispatch: Dispatch,
+    getState: () => { auth: { uid: string } }
+  ) => {
+    const { uid } = getState().auth;
+    const notes = await loadNotesByPath({ uid, path: "/trashbin/notes" });
+    dispatch(setTrashBin(notes));
   };
 };
 
@@ -90,17 +103,69 @@ export const startUploadingFiles = (files = [] as unknown as FileList) => {
   };
 };
 
-export const startDeletingNote = () => {
+export const startRemovingNote = () => {
   return async (
     dispatch: Dispatch,
-    getState: () => { auth: { uid: string }; journal: { active: Note } }
+    getState: () => {
+      auth: { uid: string };
+      journal: { active: Note; trashBin: Note[] };
+    }
   ) => {
     const { uid } = getState().auth;
-    const { active: note } = getState().journal;
+    const { active: note, trashBin } = getState().journal;
 
-    const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
-    await deleteDoc(docRef);
+    const journalDocRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
+    await deleteDoc(journalDocRef);
 
-    dispatch(deleteNoteByID(note.id));
+    const trashbinDocRef = doc(FirebaseDB, `${uid}/trashbin/notes/${note.id}`);
+    await setDoc(trashbinDocRef, { ...note, date: Date.now() });
+
+    dispatch(removeNoteByID(note.id));
+    dispatch(setTrashBin([...trashBin, note]));
+  };
+};
+
+export const startDeletingNote = (noteID: string) => {
+  return async (
+    dispatch: Dispatch,
+    getState: () => { auth: { uid: string } }
+  ) => {
+    const { uid } = getState().auth;
+
+    const trashbinDocRef = doc(FirebaseDB, `${uid}/trashbin/notes/${noteID}`);
+    await deleteDoc(trashbinDocRef);
+
+    dispatch(deleteNoteByID(noteID));
+  };
+};
+
+export const startRecoveringNote = (noteID: string) => {
+  return async (
+    dispatch: Dispatch,
+    getState: () => { auth: { uid: string }; journal: { trashBin: Note[] } }
+  ) => {
+    const { uid } = getState().auth;
+    const { trashBin } = getState().journal;
+
+    const note = trashBin.find((noteFromTrahs) => noteFromTrahs.id == noteID);
+
+    if (note === undefined) {
+      console.log(trashBin);
+      return;
+    }
+
+    const trashbinDocRef = doc(FirebaseDB, `${uid}/trashbin/notes/${noteID}`);
+    await deleteDoc(trashbinDocRef);
+
+    const journalDocRef = doc(collection(FirebaseDB, `${uid}/journal/notes`));
+    await setDoc(journalDocRef, note);
+
+    dispatch(deleteNoteByID(noteID));
+    dispatch(addNewEmptyNote({ ...note, id: journalDocRef.id }));
+    dispatch(setActiveNote({ ...note, id: journalDocRef.id }));
+    localStorage.setItem(
+      "lastActiveNote",
+      JSON.stringify({ ...note, id: journalDocRef.id })
+    );
   };
 };

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Note,
   setActiveNote,
-  startDeletingNote,
+  startRemovingNote,
   startSavingNote,
   startUploadingFiles,
 } from "../../store/journal";
@@ -60,9 +60,9 @@ export const NoteView = () => {
     dispatch(startUploadingFiles(target.files) as unknown as any); //eslint-disable-line
   };
 
-  const onDelete = () => {
+  const onRemoveNote = () => {
     localStorage.removeItem("lastActiveNote");
-    dispatch(startDeletingNote() as unknown as any); //eslint-disable-line
+    dispatch(startRemovingNote() as unknown as any); //eslint-disable-line
   };
 
   const onHandlerChange = (
@@ -142,7 +142,7 @@ export const NoteView = () => {
         />
       </Grid>
       <Grid container justifyContent="end">
-        <Button onClick={onDelete}>
+        <Button onClick={onRemoveNote}>
           <DeleteOutline />
         </Button>
       </Grid>

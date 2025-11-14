@@ -14,6 +14,7 @@ export const journalSlice = createSlice({
     isSaving: false,
     savedMessage: "",
     notes: [] as Note[],
+    trashBin: [] as Note[],
     active: {} as Note,
   },
   reducers: {
@@ -56,9 +57,17 @@ export const journalSlice = createSlice({
       state.active = {} as Note;
       state.notes = [];
     },
-    deleteNoteByID: (state, action: { payload: string | undefined }) => {
+    removeNoteByID: (state, action: { payload: string | undefined }) => {
       state.active = {} as Note;
       state.notes = state.notes.filter((note) => note.id != action.payload);
+    },
+    setTrashBin: (state, action: { payload: Note[] }) => {
+      state.trashBin = [...action.payload];
+    },
+    deleteNoteByID: (state, action: { payload: string | undefined }) => {
+      state.trashBin = state.trashBin.filter(
+        (note) => note.id != action.payload
+      );
     },
   },
 });
@@ -70,9 +79,11 @@ export const {
   setActiveNote,
   setNotes,
   setSaving,
-  deleteNoteByID,
+  removeNoteByID,
   updateNote,
   setPhotosToActiveNote,
   clearNotesOnLogout,
+  setTrashBin,
+  deleteNoteByID,
 } = journalSlice.actions;
 export default journalSlice.reducer;

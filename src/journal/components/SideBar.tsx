@@ -29,16 +29,18 @@ export const SideBar = ({
   const { displayName, email } = useSelector(
     (state: { auth: { displayName: string; email: string } }) => state.auth
   );
-  const { notes } = useSelector(
-    (state: { journal: { notes: Array<Note> } }) => state.journal
+  const { notes, trashBin } = useSelector(
+    (state: { journal: { notes: Note[]; trashBin: Note[] } }) => state.journal
   );
+
   const navigateTo = useNavigate();
   const [searchNote, setSearchNote] = useState("");
 
   const matchSearch = (note: Note) => {
-    const lowerBody = note.body.toLowerCase();
-    const lowerTitle = note.title.toLowerCase();
+    const lowerBody = note.body?.toLowerCase();
+    const lowerTitle = note.title?.toLowerCase();
     const lowerSearch = searchNote.toLowerCase();
+    if (lowerBody === undefined || lowerTitle === undefined) return false;
     return lowerBody.includes(lowerSearch) || lowerTitle.includes(lowerSearch);
   };
 
@@ -60,7 +62,7 @@ export const SideBar = ({
             title="Papelera"
           >
             <List disablePadding>
-              {notes.map((note, index) => (
+              {trashBin.map((note, index) => (
                 <DeletedSideBarItem key={`${index}-${note.id}`} {...note} />
               ))}
             </List>
