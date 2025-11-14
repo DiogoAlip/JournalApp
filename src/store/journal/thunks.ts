@@ -121,7 +121,7 @@ export const startRemovingNote = () => {
     await setDoc(trashbinDocRef, { ...note, date: Date.now() });
 
     dispatch(removeNoteByID(note.id));
-    dispatch(setTrashBin([...trashBin, note]));
+    dispatch(setTrashBin([...trashBin, { ...note, date: Date.now() }]));
   };
 };
 

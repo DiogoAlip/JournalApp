@@ -3,6 +3,14 @@ import { Note } from "../store/journal";
 export const noteData = (notes: Note[]) => {
   return notes.reduce(
     (acc, note) => {
+      if (
+        (note.body === undefined,
+        note.title === undefined,
+        note.date === undefined)
+      ) {
+        acc.totalNotesLength -= 1;
+        return acc;
+      }
       acc.totalBodyNotesLength += note.body.length;
       acc.totalTitleNotesLength += note.title.length;
       acc.totalNotesLength += note.body.length + note.title.length;
