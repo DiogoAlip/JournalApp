@@ -10,6 +10,7 @@ const initialState = {
   errorMessage: null,
 };
 
+//sin riesgo
 const mockUser = {
   uid: "123abc",
   email: "test@example.com",
@@ -37,6 +38,7 @@ describe("authSlice", () => {
       expect(state.displayName).toBe(mockUser.displayName);
       expect(state.photoURL).toBe(mockUser.photoURL);
     });
+    User;
 
     test("debe limpiar errorMessage al login", () => {
       const stateWithError = {

@@ -29,6 +29,7 @@ const createMockStore = (authState = {}, journalState = {}) => {
   return configureStore({
     reducer: {
       auth: () => ({
+        //sin riesgo
         displayName: "Test User",
         email: "test@example.com",
         photoURL: "https://example.com/photo.jpg",
