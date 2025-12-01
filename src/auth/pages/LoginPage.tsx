@@ -1,7 +1,14 @@
 import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Google } from "@mui/icons-material";
-import { Alert, Button, Link, TextField, Typography } from "@mui/material";
+import { Google, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Alert,
+  Button,
+  IconButton,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Grid from "@mui/material/Grid2";
 import { AuthLayout } from "../layout/AuthLayout";
@@ -25,6 +32,7 @@ const initialData = {
 };
 
 export const LoginPage = () => {
+  const [visibility, setVisibility] = useState(false);
   const [formSubmited, setFormSubmited] = useState(false);
   const dispatch = useDispatch();
   const { status, errorMessage } = useSelector(
@@ -83,14 +91,24 @@ export const LoginPage = () => {
           <Grid sx={{ mt: 2 }} size={{ xs: 12 }}>
             <TextField
               label="Contraseña"
-              type="password"
+              type={!visibility ? "password" : "text"}
               placeholder="Contraseña"
               fullWidth
               name="password"
+              autoComplete="off"
               value={password}
               error={!!passwordValid && formSubmited}
               helperText={passwordValid}
               onChange={onInputChange}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <IconButton onClick={() => setVisibility(!visibility)}>
+                      {visibility ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  ),
+                },
+              }}
             />
           </Grid>
           <Grid size={{ xs: 12 }} display={errorMessage ? "" : "none"}>

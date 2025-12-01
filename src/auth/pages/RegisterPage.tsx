@@ -1,35 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useMemo } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { AuthLayout } from "../layout/AuthLayout";
-import { useForm, ValidatorType } from "../../hooks/useForm";
-import { startCreatingUserWithEmailPassword } from "../../store/auth/thunks";
-import { Button, Link, TextField, Typography, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { AuthLayout } from "../layout/AuthLayout";
+import { useForm } from "../../hooks/useForm";
+import { startCreatingUserWithEmailPassword } from "../../store/auth/thunks";
+import {
+  Button,
+  Link,
+  TextField,
+  Typography,
+  Alert,
+  IconButton,
+} from "@mui/material";
+import {
+  initialFormData as initialData,
+  formValidator as initialForm,
+} from "../../helper";
 
-const initialData = {
-  displayName: "",
-  email: "",
-  password: "",
-};
-
-const formValidator = {
-  email: [(value: string) => value.includes("@"), "El correo debe tener una @"],
-  password: [
-    (value: string) => value.length >= 6,
-    "La contraseña debe tener más de 6 letras",
-  ],
-  displayName: [
-    (value: string) => value.length >= 3,
-    "El nombre es obligatorio",
-  ],
-} as ValidatorType<typeof initialData>;
+const formValidator = { ...initialForm };
 
 export const RegisterPage = () => {
+  const [visibility, setVisibility] = useState(false);
+  const [formSubmited, setFormSubmited] = useState(false);
   const { status, errorMessage } = useSelector(
     (state: { auth: { status: string; errorMessage: string } }) => state.auth
   );
-  const [formSubmited, setFormSubmited] = useState(false);
   const dispatch = useDispatch();
 
   const isCheckingAuthentication = useMemo(
@@ -58,7 +55,7 @@ export const RegisterPage = () => {
 
   return (
     <AuthLayout title="Register">
-      <h1>Form {isFormValid ? "Valid" : "Incorrect"}</h1>
+      {formSubmited ?? <h1>Form {isFormValid ? "Valid" : "Incorrect"}</h1>}
       <form
         action=""
         onSubmit={onSubmit}
@@ -94,14 +91,24 @@ export const RegisterPage = () => {
           <Grid sx={{ mt: 2 }} size={{ xs: 12 }}>
             <TextField
               label="Contraseña"
-              type="password"
+              type={!visibility ? "password" : "text"}
               placeholder="Confirmar Contraseña"
               name="password"
+              autoComplete="off"
               value={password}
               onChange={onInputChange}
               error={!!passwordValid && formSubmited}
               helperText={passwordValid}
               fullWidth
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <IconButton onClick={() => setVisibility(!visibility)}>
+                      {visibility ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  ),
+                },
+              }}
             />
           </Grid>
           <Grid size={{ xs: 12 }} display={errorMessage ? "" : "none"}>
