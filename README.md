@@ -1,50 +1,75 @@
-# React + TypeScript + Vite
+# Journal App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for creating and managing a personal journal, built with React and Redux.
 
-Currently, two official plugins are available:
+## 📝 Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Journal App allows you to keep a record of your daily thoughts and ideas. You can create notes, edit them, save changes in real-time, and attach images to your entries. The application features a robust authentication system and a clean, responsive user interface.
 
-## Expanding the ESLint configuration
+## 🚀 Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This project uses the following key technologies and libraries:
 
-- Configure the top-level `parserOptions` property like this:
+- **[React](https://react.dev/)**: Library for building user interfaces.
+- **[TypeScript](https://www.typescriptlang.org/)**: A superset of JavaScript that adds static types for more robust development.
+- **[Vite](https://vitejs.dev/)**: Next Generation Frontend Tooling.
+- **[Redux Toolkit](https://redux-toolkit.js.org/)**: The official opinionated, batteries-included toolset for efficient Redux development.
+- **[Material UI (MUI)](https://mui.com/)**: React component library that implements Material Design for a beautiful and consistent UI.
+- **[Firebase](https://firebase.google.com/)**: Google's development platform used for:
+  - **Authentication**: User management (Login/Register with Email and Google).
+  - **Firestore Database**: Cloud NoSQL database to store notes.
+- **[SweetAlert2](https://sweetalert2.github.io/)**: A beautiful, responsive, highly customizable replacement for JavaScript's popup boxes.
+- **[Vitest](https://vitest.dev/)** & **[Testing Library](https://testing-library.com/)**: For unit and integration testing.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## ✨ Key Features
+
+- **User Authentication**:
+  - New account registration using email and password.
+  - Quick login with Google.
+  - Form validation.
+
+- **Journal Management**:
+  - **Create**: Easily add new entries to your journal.
+  - **Edit**: Modify the title and content of your existing notes.
+  - **List**: View all your notes in an organized sidebar.
+  - **Images**: Upload and view image galleries for each note (integration with storage services like Cloudinary).
+  - **Delete**: Remove notes that you no longer need.
+
+- **User Experience**:
+  - Visual feedback (loading alerts, success/error messages).
+  - Fully responsive design (adapted for mobile and desktop).
+
+## 📦 Installation and Setup
+
+To run this project locally:
+
+1. **Clone the repository**:
+   ```bash
+   git clone <your-repository-url>
+   cd journal-app
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Run in development**:
+   ```bash
+   npm run dev
+   ```
+
+## 🧪 Tests
+
+The project includes configured tests. To run them:
+
+```bash
+npm run test
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 📄 Available Scripts
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- `npm run dev`: Starts the development server.
+- `npm run build`: Compiles the application for production.
+- `npm run preview`: Preview the production build.
+- `npm run lint`: Runs the linter to find coding issues.
